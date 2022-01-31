@@ -28,7 +28,8 @@ namespace TicketSalesOn.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NameMovie = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleMovie = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageMovie = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PremiereDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PreviewDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

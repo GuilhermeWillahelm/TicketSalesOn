@@ -46,7 +46,7 @@ namespace TicketSalesOn.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("NameMovie")
+                    b.Property<string>("ImageMovie")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -55,6 +55,10 @@ namespace TicketSalesOn.Migrations
 
                     b.Property<DateTime>("PreviewDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("TitleMovie")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
