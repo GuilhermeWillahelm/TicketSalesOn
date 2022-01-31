@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TicketSalesOn.Models;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace TicketSalesOn.Controllers
 {
@@ -78,6 +80,27 @@ namespace TicketSalesOn.Controllers
         [HttpPost]
         public async Task<ActionResult<Users>> PostUsers(Users users)
         {
+            string password = users.Pass;
+
+            // generate a 128-bit salt using a cryptographically strong random sequence of nonzero values
+            byte[] salt = new byte[128 / 8];
+            #pragma warning disable SYSLIB0023 // Type or member is obsolete
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            #pragma warning restore SYSLIB0023 // Type or member is obsolete
+            {
+                rngCsp.GetNonZeroBytes(salt);
+            }
+            Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
+
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 100000,
+            numBytesRequested: 256 / 8));
+            Console.WriteLine($"Hashed: {hashed}");
+            users.Pass = hashed;
+
             _context.Users.Add(users);
             await _context.SaveChangesAsync();
 
