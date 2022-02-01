@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using TicketSalesOn.Models;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace TicketSalesOn.Controllers
 {
@@ -90,7 +93,6 @@ namespace TicketSalesOn.Controllers
             {
                 rngCsp.GetNonZeroBytes(salt);
             }
-            Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
 
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: password,
@@ -98,7 +100,7 @@ namespace TicketSalesOn.Controllers
             prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 100000,
             numBytesRequested: 256 / 8));
-            Console.WriteLine($"Hashed: {hashed}");
+
             users.Pass = hashed;
 
             _context.Users.Add(users);
